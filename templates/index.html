@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block title %}
+<title>{{config.title}}</title>
+<meta name="description" content="{{section.extra.description | default(value=config.description)}}" />
+{% endblock %}
+
+{% block content %}
+<div class="columns">
+    <div class="column">
+        <div class="columns is-multiline">
+            {{ section.content | safe }}
+            {% for sectionpath in section.subsections %}
+            {% set child = get_section(path=sectionpath, metadata_only=false) %}
+            <div class="column is-full">
+                {{ macros::categorycard(section=child) }}
+            </div>
+            {% endfor %}
+            {% for page in section.pages %}
+            <div class="column is-full">
+                {{ macros::pagecard(page=page) }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
